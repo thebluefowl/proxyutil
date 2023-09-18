@@ -37,7 +37,8 @@ import (
 	"net/http"
 	"net/textproto"
 	"strings"
-	"vendor/golang.org/x/net/http/httpguts"
+
+	"golang.org/x/net/http/httpguts"
 )
 
 // RemoveHopHeaders removes hop-by-hop headers and connection specific headers.
