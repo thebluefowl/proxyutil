@@ -27,3 +27,10 @@ func CloneRequest(src *http.Request) (*http.Request, error) {
 
 	return dst, nil
 }
+
+func GetProto(r *http.Request) string {
+	if r.TLS == nil {
+		return "http"
+	}
+	return "https"
+}

@@ -34,6 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package proxyutil
 
 import (
+	"net"
 	"net/http"
 	"net/textproto"
 	"strings"
@@ -81,4 +82,19 @@ func UpgradeType(h http.Header) string {
 		return ""
 	}
 	return h.Get("Upgrade")
+}
+
+func GetForwardedHeaders(r *http.Request) http.Header {
+	h := make(http.Header)
+	clientIP, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err == nil {
+		prior := r.Header.Get("X-Forwarded-For")
+		if len(prior) > 0 {
+			clientIP = prior + ", " + clientIP
+		}
+		h.Set("X-Forwarded-For", clientIP)
+	}
+	h.Set("X-Forwarded-Proto", GetProto(r))
+	h.Set("X-Forwarded-Host", r.Host)
+	return h
 }
